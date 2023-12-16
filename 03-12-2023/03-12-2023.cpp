@@ -40,26 +40,21 @@ void partTwo(vector<PartNumber> &partNumbers, vector<string> &lines) {
   // iterate through lines
   for (int y = 0; y < lines.size(); y++) {
     auto line = lines[y];
-    // iterate through chars
     for (int x = 0; x < line.length(); x++) {
       auto ch = line[x];
-      // find gear
       if (ch != '*') continue;
       Gear gear{};
-      for (auto &[direction, _] : directions) {
-        // look through all adjacent chars
-        auto &[dy, dx] = directions[direction];
+
+      for (auto &[_, direction] : directions) {
+        auto &[dy, dx] = direction;
         Point scanPos{x + dx, y + dy};
-        // bound checks
         auto inBounds = scanPos.X >= 0 &&
                         scanPos.X < lines[scanPos.Y].length() &&
                         scanPos.Y >= 0 && scanPos.Y < lines.size();
         if (!inBounds) continue;
         auto scanChar = lines[scanPos.Y][scanPos.X];
-        // if it's a number, get the coordinate
         if (!isdigit(scanChar)) continue;
-        // with that coordinate we can find the partNumber
-        auto isScanPartNumber = [&](PartNumber &partNumber) {
+        auto isScanPartNumber = [&](auto &partNumber) {
           return partNumber.y == scanPos.Y && partNumber.x1 <= scanPos.X &&
                  partNumber.x2 >= scanPos.X;
         };
@@ -68,7 +63,7 @@ void partTwo(vector<PartNumber> &partNumbers, vector<string> &lines) {
         if (partNumber != partNumbers.end()) {
           auto match = std::find_if(
               gear.adjacentPartNumbers.begin(), gear.adjacentPartNumbers.end(),
-              [&](PartNumber &pN) { return pN.id == partNumber->id; });
+              [&](auto &pN) { return pN.id == partNumber->id; });
           if (match == gear.adjacentPartNumbers.end())
             gear.adjacentPartNumbers.push_back(*partNumber);
         }
