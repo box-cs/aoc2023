@@ -37,7 +37,6 @@ void partOne(std::vector<PartNumber> &partNumbers, std::vector<string> &lines) {
 
 void partTwo(vector<PartNumber> &partNumbers, vector<string> &lines) {
   vector<Gear> gears{};
-  // iterate through lines
   for (int y = 0; y < lines.size(); y++) {
     auto line = lines[y];
     for (int x = 0; x < line.length(); x++) {
