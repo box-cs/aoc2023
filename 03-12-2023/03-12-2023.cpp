@@ -1,14 +1,9 @@
 #include "../lib/io.hpp"
 #include "gear.hpp"
-#include <cassert>
-#include <charconv>
-#include <map>
-#include <ranges>
 #include <string>
 #include <vector>
 
 #define UNSET_POSTION (-1)
-using std::map;
 using std::string;
 using std::vector;
 
