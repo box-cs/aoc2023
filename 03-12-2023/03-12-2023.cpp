@@ -10,11 +10,11 @@ using std::vector;
 void partOne(std::vector<PartNumber> &partNumbers, std::vector<string> &lines);
 void partTwo(vector<PartNumber> &partNumbers, vector<string> &lines);
 vector<PartNumber> getPartNumbers(vector<string> &lines);
-vector<string> getLines(std::stringstream &&ss);
 
 int main(int argc, char *argv[]) {
-  auto file = io::readFile("input.txt", []() { exit(1); });
-  auto lines = getLines(std::move(file));
+  auto f = io::readFile("input.txt");
+  auto lines = io::readLines<string>(
+      f, [](auto &ss) { return io::input<string>("", ' ', '\n', ss); });
   auto partNumbers = getPartNumbers(lines);
   partOne(partNumbers, lines);
   partTwo(partNumbers, lines);
@@ -99,14 +99,4 @@ vector<PartNumber> getPartNumbers(vector<string> &lines) {
     }
   }
   return partNumbers;
-}
-
-vector<string> getLines(std::stringstream &&ss) {
-  vector<string> lines{};
-  string line = io::input<string>("", ' ', '\n', ss);
-  while (line != "") {
-    lines.push_back(line);
-    line = io::input<string>("", ' ', '\n', ss);
-  }
-  return lines;
 }

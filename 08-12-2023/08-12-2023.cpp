@@ -21,8 +21,9 @@ NavigationGraph getNavigationGraphs(auto lines, string pattern);
 vector<string> getLines(std::stringstream &&ss);
 
 int main(int argc, char *argv[]) {
-  auto f = io::readFile("input.txt", []() { exit(1); });
-  auto lines = getLines(std::move(f));
+  auto f = io::readFile("input.txt");
+  auto lines = io::readLines<string>(
+      f, [](auto &ss) { return io::input<string>("", 0, '\n', ss); });
   partOne(lines);
   partTwo(lines);
   return 0;
@@ -92,13 +93,4 @@ NavigationGraph getNavigationGraphs(auto lines, string pattern) {
     }
   }
   return graph;
-}
-
-vector<string> getLines(std::stringstream &&ss) {
-  vector<string> lines{};
-  do {
-    string line = io::input<string>("", 0, '\n', ss);
-    lines.push_back(line);
-  } while (lines.back() != "");
-  return {lines.begin(), lines.end() - 1};
 }

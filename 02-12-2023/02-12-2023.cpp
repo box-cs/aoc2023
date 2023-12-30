@@ -32,7 +32,7 @@ void partTwo(vector<Game> &games);
 vector<Game> getGames(std::stringstream &&ss);
 
 int main(int argc, char *argv[]) {
-  auto file = io::readFile("input.txt", []() { exit(1); });
+  auto file = io::readFile("input.txt");
   auto games = getGames(std::move(file));
   partOne(games);
   partTwo(games);

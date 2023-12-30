@@ -14,16 +14,15 @@ using std::string;
 using std::stringstream;
 using std::vector;
 
-vector<string> getLines(std::stringstream &&ss);
 void partOne(auto lines);
 void partTwo(auto lines);
 lli getWaysToWin(lli raceTime, lli recordDistance);
 auto solveQuadratic(lli a, lli b, lli c);
 
 int main(int argc, char *argv[]) {
-  auto f = io::readFile("input.txt", []() { exit(1); });
-  auto lines = getLines(std::move(f));
-
+  auto f = io::readFile("input.txt");
+  auto lines = io::readLines<string>(
+      f, [](auto &ss) { return io::input<string>("", 0, '\n', ss); });
   partOne(lines);
   partTwo(lines);
   return 0;
@@ -93,13 +92,4 @@ lli getWaysToWin(lli raceTime, lli recordDistance) {
 auto solveQuadratic(lli a, lli b, lli c) {
   return std::pair{(-b + sqrt(b * b - 4 * a * c)) / (2 * a),
                    (-b - sqrt(b * b - 4 * a * c)) / (2 * a)};
-}
-
-vector<string> getLines(std::stringstream &&ss) {
-  vector<string> lines{};
-  do {
-    string line = io::input<string>("", 0, '\n', ss);
-    lines.push_back(line);
-  } while (lines.back() != "");
-  return {lines.begin(), lines.end() - 1};
 }

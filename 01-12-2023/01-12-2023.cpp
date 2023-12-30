@@ -12,25 +12,15 @@ using std::string;
 using std::tuple;
 using std::vector;
 
-vector<string> getLines(std::stringstream &&ss);
 void partOne(const auto &lines);
 void partTwo(const auto &lines);
 
 int main(int argc, char *argv[]) {
-  auto file = io::readFile("input.txt", []() { exit(1); });
-  const auto lines = getLines(std::move(file));
+  auto f = io::readFile("input.txt");
+  const auto lines = io::readLines<string>(
+      f, [](auto &ss) { return io::input<string>("", ' ', '\n', ss); });
   partOne(lines);
   partTwo(lines);
-}
-
-vector<string> getLines(std::stringstream &&ss) {
-  vector<string> lines{};
-  string line = io::input<string>("", ' ', '\n', ss);
-  while (line != "") {
-    lines.push_back(line);
-    line = io::input<string>("", ' ', '\n', ss);
-  }
-  return lines;
 }
 
 void partOne(const auto &lines) {

@@ -14,14 +14,14 @@ namespace views = std::views;
 
 typedef std::map<int, int> CardDict;
 
-vector<string> getLines(stringstream &&ss);
 int getMatches(auto numbersIter, auto winningNumbersIter);
 void partOne(vector<string> lines);
 void partTwo(vector<string> lines);
 
 int main(int argc, char *argv[]) {
-  auto file = io::readFile("input.txt", []() { exit(1); });
-  auto lines = getLines(std::move(file));
+  auto f = io::readFile("input.txt");
+  auto lines = io::readLines<string>(
+      f, [](auto &ss) { return io::input<string>("", 0, '\n', ss); });
   partOne(lines);
   partTwo(lines);
 }
@@ -77,13 +77,4 @@ int getMatches(auto numbersIter, auto winningNumbersIter) {
   return ranges::count_if(numbers, [&](int number) {
     return ranges::find(winningNumbers, number) != winningNumbers.end();
   });
-}
-
-vector<string> getLines(std::stringstream &&ss) {
-  vector<string> lines{};
-  do {
-    string line = io::input<string>("", 0, '\n', ss);
-    lines.push_back(line);
-  } while (lines.back() != "");
-  return {lines.begin(), lines.end() - 1};
 }

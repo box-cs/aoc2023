@@ -59,15 +59,15 @@ void partOne(auto lines);
 void partTwo(auto lines);
 HandRank pairToHandRank(pair<int, int> kinds);
 pair<pair<char, int>, pair<char, int>> getPair(string hand);
-vector<string> getLines(std::stringstream &&ss);
 
 static map<char, int> faceCards = {
     {'2', 2}, {'3', 3},  {'4', 4},  {'5', 5},  {'6', 6},  {'7', 7}, {'8', 8},
     {'9', 9}, {'T', 10}, {'J', 11}, {'Q', 12}, {'K', 13}, {'A', 14}};
 
 int main(int argc, char *argv[]) {
-  auto f = io::readFile("input.txt", []() { exit(1); });
-  auto lines = getLines(std::move(f));
+  auto f = io::readFile("input.txt");
+  auto lines = io::readLines<string>(
+      f, [](auto &ss) { return io::input<string>("", 0, '\n', ss); });
   partOne(lines);
   partTwo(lines);
   return 0;
@@ -199,13 +199,4 @@ pair<pair<char, int>, pair<char, int>> getPair(string hand) {
   highKindCount = pair{sorted[last].first, sorted[last].second};
   secondHighCount = pair{sorted[last - 1].first, sorted[last - 1].second};
   return pair{highKindCount, secondHighCount};
-}
-
-vector<string> getLines(std::stringstream &&ss) {
-  vector<string> lines{};
-  do {
-    string line = io::input<string>("", 0, '\n', ss);
-    lines.push_back(line);
-  } while (lines.back() != "");
-  return {lines.begin(), lines.end() - 1};
 }

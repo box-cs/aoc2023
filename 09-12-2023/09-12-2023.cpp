@@ -13,14 +13,14 @@ using std::string;
 using std::vector;
 
 vector<int> getNumbersInLine(string line);
-vector<string> getLines(std::stringstream &&ss);
 vector<int> getDifferences(vector<int> numbers);
 void partOne(auto lines);
 void partTwo(auto lines);
 
 int main(int argc, char *argv[]) {
-  auto f = io::readFile("input.txt", []() { exit(1); });
-  auto lines = getLines(std::move(f));
+  auto f = io::readFile("input.txt");
+  auto lines = io::readLines<string>(
+      f, [](auto &ss) { return io::input<string>("", 0, '\n', ss); });
   // Horrible code because my datastructure didn't include the initial line
   partOne(lines);
   partTwo(lines);
@@ -118,13 +118,4 @@ vector<int> getNumbersInLine(string line) {
     numbers.push_back(value);
   }
   return numbers;
-}
-
-vector<string> getLines(std::stringstream &&ss) {
-  vector<string> lines{};
-  do {
-    string line = io::input<string>("", 0, '\n', ss);
-    lines.push_back(line);
-  } while (lines.back() != "");
-  return {lines.begin(), lines.end() - 1};
 }
