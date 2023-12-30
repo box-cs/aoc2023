@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <charconv>
 #include <cstdint>
+#include <iostream>
 #include <ranges>
 #include <regex>
 #include <string>
@@ -15,10 +16,14 @@ vector<int> getNumbersInLine(string line);
 vector<string> getLines(std::stringstream &&ss);
 vector<int> getDifferences(vector<int> numbers);
 void partOne(auto lines);
+void partTwo(auto lines);
 
 int main(int argc, char *argv[]) {
   auto f = io::readFile("input.txt", []() { exit(1); });
   auto lines = getLines(std::move(f));
+  // Horrible code because my datastructure didn't include the initial line
+  partOne(lines);
+  partTwo(lines);
   return 0;
 }
 
@@ -38,16 +43,6 @@ void partOne(auto lines) {
     triangles.push_back(triangle);
   }
 
-  // for (auto &triangle : triangles) {
-  //   for (auto &line : triangle) {
-  //     for (auto &number : line) {
-  //       std::cout << number << " ";
-  //     }
-  //     std::cout << std::endl;
-  //   }
-  //   std::cout << std::endl;
-  // }
-
   vector<int> sums{};
   for (auto &triangle : triangles) {
     int sum{};
@@ -61,8 +56,44 @@ void partOne(auto lines) {
   for (int i = 0; i < lines.size(); i++) {
     sum += (getNumbersInLine(lines[i]).back() + sums[i]);
   }
-  std::cout << "Sum: " << sum << std::endl;
+  std::cout << "Part One: " << sum << std::endl;
 }
+
+void partTwo(auto lines) {
+  vector<vector<vector<int>>> triangles{};
+  for (auto &line : lines) {
+    vector<vector<int>> triangle{};
+    bool canBeSolved = false;
+    auto numbersInLine = getNumbersInLine(line);
+    do {
+      numbersInLine = getDifferences(numbersInLine);
+      triangle.push_back(numbersInLine);
+      canBeSolved =
+          all_of(numbersInLine.begin(), numbersInLine.end(),
+                 [&](int number) { return number == numbersInLine.front(); });
+    } while (!canBeSolved);
+    triangles.push_back(triangle);
+  }
+
+  int lineCount = 0;
+  int64_t sum{};
+  for (auto &triangle : triangles) {
+    int current = 0;
+    int count = 0;
+    for (auto &line : triangle | std::views::reverse) {
+      auto front = line.front();
+      current = front - current;
+      if (count++ == triangle.size() - 1) {
+        auto lineFront = getNumbersInLine(lines[lineCount]).front();
+        auto leftMost = lineFront - current;
+        sum += leftMost;
+      }
+    }
+    lineCount++;
+  }
+  std::cout << "Part Two: " << sum << std::endl;
+}
+
 vector<int> getDifferences(vector<int> numbers) {
   vector<int> differences{};
   auto scan = numbers.front();
