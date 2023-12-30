@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
   auto f = io::readFile("input.txt", []() { exit(1); });
   auto lines = getLines(std::move(f));
 
-  // partOne(lines);
+  partOne(lines);
   partTwo(lines);
   return 0;
 }

@@ -57,6 +57,7 @@ void partTwo(auto lines) {
   string pattern("(.{3}) = \\((.{3}),\\s(.{3})\\)");
   auto graph = getNavigationGraphs(lines, pattern);
   vector<int> stepsTaken{};
+  int64_t lcm = 0;
   for (auto startingRoute : startingRoutes) {
     int steps = 0;
     auto location = graph[startingRoute];
@@ -65,18 +66,16 @@ void partTwo(auto lines) {
       for (auto routeInstruction : instructions) {
         route = location[ACCESS_NODE(routeInstruction)];
         location = graph[route];
-        // std::cout << "Route: " << route << std::endl;
         steps++;
       }
     }
     stepsTaken.push_back(steps);
-    uint64_t lcm = stepsTaken[0];
+    lcm = stepsTaken[0];
     for (auto stepTaken : stepsTaken | std::views::drop(1)) {
       lcm = std::lcm(lcm, stepTaken);
     }
-
-    std::cout << "Part 2: " << lcm << '\n';
   }
+  std::cout << "Part 2: " << lcm << '\n';
 }
 
 NavigationGraph getNavigationGraphs(auto lines, string pattern) {
